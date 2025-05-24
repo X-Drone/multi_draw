@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 interface DrawingBoardProps {
-  isVisible: boolean;
-  onSave?: (content: string) => void;
+  onSave?: (boardId: string, content: string) => void;
+  boardID?: string;
   initialContent?: string;
-  isBackground?: boolean;
+  setDrawingContent?: (content: string) => void;
 }
 
 interface Point {
@@ -13,10 +13,10 @@ interface Point {
 }
 
 const DrawingBoard: React.FC<DrawingBoardProps> = ({ 
-  isVisible, 
   onSave, 
+  boardID,
   initialContent,
-  isBackground = false 
+  setDrawingContent
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -31,8 +31,6 @@ const DrawingBoard: React.FC<DrawingBoardProps> = ({
   const [dragStart, setDragStart] = useState<Point | null>(null);
 
   useEffect(() => {
-    if (!isVisible) return;
-
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -79,7 +77,7 @@ const DrawingBoard: React.FC<DrawingBoardProps> = ({
       observer.disconnect();
       setContext(null);
     };
-  }, [isVisible, initialContent, scale, offset]);
+  }, [initialContent, scale, offset]);
   const loadContent = (content: string) => {
     if (!context || !canvasRef.current) return;
     if (!content) {
@@ -114,9 +112,10 @@ const DrawingBoard: React.FC<DrawingBoardProps> = ({
   };
 
   const saveContent = () => {
-    if (!canvasRef.current || !onSave) return;
+    if (!canvasRef.current || !onSave || !setDrawingContent || !boardID) return;
     const content = canvasRef.current.toDataURL('image/png');
-    onSave(content);
+    setDrawingContent(content);
+    //onSave(boardID, content);
   };
 
   const getCanvasPoint = (clientX: number, clientY: number): Point => {
@@ -244,11 +243,8 @@ const DrawingBoard: React.FC<DrawingBoardProps> = ({
     setOffset({ x: 0, y: 0 });
   };
 
-  if (!isVisible) return null;
-
   return (
-    <div className={`drawing-board ${isBackground ? 'drawing-board--background' : ''}`}>
-      {!isBackground && (
+    <div className={`drawing-board`}>
         <div className="drawing-board__tools">
           <input
             type="color"
@@ -292,7 +288,6 @@ const DrawingBoard: React.FC<DrawingBoardProps> = ({
             </button>
           )}
         </div>
-      )}
       <div 
         ref={containerRef}
         className="drawing-board__canvas-container"

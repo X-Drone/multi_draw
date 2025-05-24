@@ -4,7 +4,7 @@
       "id": "1",
       "name": "Project Wireframe",
       "createdAt": "2024-03-15",
-      "lastModified": "2025-05-18T22:00:31.265Z",
+      "lastModified": "2025-05-24T12:31:09.490Z",
       "description": "Website layout mockup"
     },
     {
@@ -15,11 +15,26 @@
       "description": "Feature ideas discussion"
     },
     {
-      "id": "6223cbde-3f1a-4c3a-b6cf-e27b8e45db2c",
-      "name": "Untitled Board 1",
-      "createdAt": "2025-05-18T21:57:46.613Z",
-      "lastModified": "2025-05-18T21:58:26.807Z",
-      "description": "New drawing board 1"
+      "id": "b679a57f-bf90-4f1d-8969-00e280558479",
+      "name": "Untitled Board",
+      "createdAt": "2025-05-24T12:28:33.146Z",
+      "lastModified": "2025-05-24T12:28:33.146Z",
+      "description": "New drawing board",
+      "thumbnail": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+    },
+    {
+      "id": "d77b4339-d0f9-4a53-91ea-00c6d1625add",
+      "name": "Untitled Board",
+      "createdAt": "2025-05-24T12:28:33.676Z",
+      "lastModified": "2025-05-24T12:28:33.769Z",
+      "description": "New drawing board"
+    },
+    {
+      "id": "a5d5f201-851d-45e7-8a3f-f3aa0eb8531a",
+      "name": "Untitled Board",
+      "createdAt": "2025-05-24T12:28:34.029Z",
+      "lastModified": "2025-05-24T12:28:34.152Z",
+      "description": "New drawing board"
     }
   ]
 }

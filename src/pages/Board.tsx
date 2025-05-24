@@ -8,25 +8,12 @@ const Board: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [error, setError] = useState<string>();
-  const { 
-    setIsDrawingVisible, 
-    setDrawingContent, 
-    setOnSaveDrawing, 
-    setActiveBoard,
-    activeBoard
+  const {
+    setBoardID,
+    setDrawingContent,
+    setOnSaveDrawing,
   } = useOutletContext<PageShellContext>();
   const queryClient = useQueryClient();
-
-  // Clean up on component unmount or when active board changes
-  useEffect(() => {
-    return () => {
-      if (!activeBoard || activeBoard !== id) {
-        setIsDrawingVisible(false);
-        setDrawingContent(undefined);
-        setOnSaveDrawing(undefined);
-      }
-    };
-  }, [setIsDrawingVisible, setDrawingContent, setOnSaveDrawing, activeBoard, id]);
 
   const { data: board, isLoading, isError } = useQuery({
     queryKey: ["board", id],
@@ -89,13 +76,11 @@ const Board: React.FC = () => {
   // Set up drawing visibility and handlers
   useEffect(() => {
     if (!board) return;
-    
-    setIsDrawingVisible(true);
+    setBoardID(board.id)
     if (board.content) {
       setDrawingContent(board.content);
     }
-    setOnSaveDrawing(handleSave);
-  }, [setIsDrawingVisible, setDrawingContent, setOnSaveDrawing, board, handleSave]);
+  }, [setBoardID, setDrawingContent, board, handleSave]);
 
   if (isLoading) return <div className="board-page__loading">Loading...</div>;
   if (isError || !board) return (
@@ -112,7 +97,6 @@ const Board: React.FC = () => {
   );
 
   const handleBack = () => {
-    setIsDrawingVisible(false);
     setDrawingContent(undefined);
     setOnSaveDrawing(undefined);
     navigate('/boards');
@@ -121,18 +105,6 @@ const Board: React.FC = () => {
   const handleUpdateBoard = async (updates: Partial<BoardType>) => {
     setError(undefined);
     await updateBoardMutation.mutateAsync({ ...board, ...updates });
-  };
-
-  const toggleActiveBoard = () => {
-    if (activeBoard === board.id) {
-      setActiveBoard(null);
-    } else {
-      setActiveBoard(board.id);
-      // Set the content for the background board
-      if (board.content) {
-        setDrawingContent(board.content);
-      }
-    }
   };
 
   return (
@@ -160,12 +132,6 @@ const Board: React.FC = () => {
               }}
             >
               Rename
-            </button>
-            <button 
-              className={`board-page__active-btn ${activeBoard === board.id ? 'board-page__active-btn--active' : ''}`}
-              onClick={toggleActiveBoard}
-            >
-              {activeBoard === board.id ? 'Remove as Active' : 'Set as Active'}
             </button>
           </div>
         </div>
