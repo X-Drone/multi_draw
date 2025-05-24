@@ -3,6 +3,10 @@
 @import "./pages/boards.css";
 @import "./pages/drawing-board.css";
 @import "./pages/page-shell.css";
+@import "./pages/login.css";
+@import "./pages/signup.css";
+@import "./pages/user.css";
+@import "./pages/users.css";
 
 body {
   margin: 0;
