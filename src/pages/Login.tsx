@@ -57,7 +57,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     // Здесь должна быть логика проверки пользователя на сервере
     // Для примера мы просто вызовем login с данными формы
-    login({ name: 'John Doe', email: formData.email });
+    login({ name: 'John Doe', email: formData.email, friends: [] });
     navigate('/');
   };
 

@@ -3,6 +3,9 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import DrawingBoard from '../DrawingBoard';
 import { saveDrawing } from '../../services/boardService';
+import Friends from '../Friends';
+import Chat from '../Chat';
+import { User } from '../../context/UserContext';
 
 interface PageShellContext {
   setBoardID: (content: string | undefined) => void;
@@ -40,6 +43,13 @@ const PageShell: React.FC = () => {
             initialContent={drawingContent}
             setDrawingContent={setDrawingContent}
           />
+          <div className="page-shell__sidebar">
+          <Friends/>
+          <Chat 
+            messages={[] /* Передайте сообщения из состояния */}
+            onSendMessage={() => { /* Логика отправки */ }}
+          />
+        </div>
       </main>
     </div>
   );
