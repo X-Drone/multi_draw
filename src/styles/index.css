@@ -3,6 +3,60 @@
 @import "./pages/boards.css";
 @import "./pages/drawing-board.css";
 @import "./pages/page-shell.css";
+@import "./pages/login.css";
+@import "./pages/signup.css";
+@import "./pages/user.css";
+@import "./pages/users.css";
+
+/* В styles.css или глобальном файле */
+.page-shell__main {
+  display: flex;
+  height: 100vh;
+  gap: 2rem;
+}
+
+.friends-list {
+  flex: 1;
+  padding: 1rem;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.chat-container {
+  flex: 2;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.chat-input {
+  display: flex;
+  padding: 0.5rem;
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.chat-input-field {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 4px;
+  margin-right: 0.5rem;
+}
+
+.chat-send-btn {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
 body {
   margin: 0;
