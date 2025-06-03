@@ -2,12 +2,12 @@ name: Deploy to Production
 
 on:
   push:
-    branches: [master]  # Автодеплой только для ветки master
+    branches: [master]
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'  # Дополнительная проверка ветки
+    if: github.ref == 'refs/heads/master'
 
     steps:
       - name: Checkout code
@@ -20,10 +20,10 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps  # Используем для совместимости
+        run: npm ci --legacy-peer-deps
 
       - name: Build with Webpack
-        run: npm run build  # Замените на вашу команду сборки
+        run: npm run build
 
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.6
@@ -32,9 +32,9 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/"  # Укажите вашу папку сборки
-          target: "/volume1/homes/x-drone/multi_draw"
-          rm: true  # Удалить предыдущие файлы
+          source: "dist/"
+          target: "/volume1/web/multi_draw"
+          rm: true
           overwrite: true
 
       - name: Verify deployment
@@ -45,5 +45,14 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            ls -la /volume1/homes/x-drone/multi_draw
-            echo "Деплой завершен успешно!"
+            ls -la /volume1/web/multi_draw
+            echo "Deployed successfully"
+      - name: Reload NginX
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo nginx -t && sudo nginx -s reload
