@@ -5,7 +5,7 @@ interface FriendsProps {
 }
 
 const Friends: React.FC<FriendsProps> = ({  }) => {
-  const { user } = useUser();
+  const { user, delFriend } = useUser();
   const [showModal, setShowModal] = useState(false);
   const [friendToRemove, setFriendToRemove] = useState<User | null>(null);
   const [friends, setFriends] = useState<User[]>([]);
@@ -31,7 +31,7 @@ const Friends: React.FC<FriendsProps> = ({  }) => {
     setFriends(friends.filter(f => f.id !== friendId));
     setFriendToRemove(null);
     setShowModal(false);
-    user?.friends.splice(friendId, 1);
+    delFriend(friendId);
   };
 
   return (

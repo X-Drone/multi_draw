@@ -13,13 +13,15 @@ interface UserContextType {
   login: (userData: Partial<User>) => void;
   logout: () => void;
   addFriend: (friend: User) => void;
+  delFriend: (friendId: number) => void;
 }
 
 const UserContext = createContext<UserContextType>({
   user: null,
   login: () => {},
   logout: () => {},
-  addFriend: (friend: User) => {}
+  addFriend: (friend: User) => {},
+  delFriend: (friendId: number) => {}
 });
 
 export const useUser = () => useContext(UserContext);
@@ -47,12 +49,22 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     let updatedFriends = [...friends];
     updatedFriends.push(friend);
     setFriends(updatedFriends);
-    console.log('friends updated');
-    console.log(friends);
+    friends.push(friend);
+    user?.friends.push(friend);
+    console.log('----\nfriends updated', friends, friend, updatedFriends, '\n----');
+  }
+
+  const delFriend = (friendId: number) => {
+    let updatedFriends = [...friends];
+    updatedFriends.splice(friendId, 1);
+    setFriends(updatedFriends);
+    friends.splice(friendId, 1);
+    user?.friends.splice(friendId, 1);
+    console.log('----\nfriends updated', friends, updatedFriends, '\n----');
   }
 
   return (
-    <UserContext.Provider value={{ user, login, logout, addFriend }}>
+    <UserContext.Provider value={{ user, login, logout, addFriend, delFriend }}>
       {children}
     </UserContext.Provider>
   );

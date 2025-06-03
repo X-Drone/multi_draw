@@ -15,7 +15,7 @@ const Users: React.FC = () => {
       setFriends(user?.friends);
       console.log(friends);
     }
-  }, [user, friends])
+  }, [user?.friends])
 
   // Пример данных пользователей
   useEffect(() => {

@@ -5,25 +5,6 @@
   position: relative;
   overflow-x: hidden;
 
-  &--has-background {
-    .page-shell__main {
-      position: relative;
-      z-index: 1;
-      background: transparent;
-    }
-
-    .drawing-board--background {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.15;
-    }
-  }
-
   &__main {
     flex: 1;
     padding-top: 4rem; /* Height of header */
@@ -33,7 +14,24 @@
     padding: 4rem 2rem 2rem;
     position: relative;
     z-index: 1;
-    
+    display: flex;
+    height: 100vh;
+    gap: 2rem;
+
+  &__content {
+    flex: 0 0 30%; /* 30% ширины */
+    padding: 1rem;
+  }
+
+  .page-shell__sidebar {
+    flex: 0 0 30%; /* 30% ширины */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--color-gray-100);
+  }
+
     /* Content areas */
     & > * {
       grid-column: 1 / -1; /* Default full width */

@@ -29,14 +29,14 @@ const PageShell: React.FC = () => {
   return (
     <div className={`page-shell page-shell--has-background`}>
       <Header />
-      <main className={`page-shell__main page-shell__main--with-board`}>
-        <div className="page-shell__content">
-          <Outlet context={{
-            setBoardID,
-            setDrawingContent,
-            setOnSaveDrawing
-          }} />
-        </div>
+      <div className="page-shell__content">
+        <Outlet context={{
+          setBoardID,
+          setDrawingContent,
+          setOnSaveDrawing
+        }} />
+      </div>
+      <main className={`page-shell__main`}>
           <DrawingBoard 
             onSave={handleSave}
             boardID={boardIDstate}
