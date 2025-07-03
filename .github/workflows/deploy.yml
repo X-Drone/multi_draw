@@ -13,6 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # ========== FRONTEND ==========
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -25,18 +26,60 @@ jobs:
       - name: Build with Webpack
         run: npm run build
 
-      - name: Deploy to server
+      - name: Deploy frontend
         uses: appleboy/scp-action@v0.1.6
         with:
           host: ${{ secrets.SSH_HOST }}
           port: ${{ secrets.SSH_PORT }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "dist/"
-          target: "/volume1/web/multi_draw"
+          source: "client/dist/"
+          target: "/volume1/web/multi_draw/client"
           rm: true
           overwrite: true
 
+
+      # ========== BACKEND ==========
+      - name: Deploy backend source
+        uses: appleboy/scp-action@v0.1.6
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "server/"
+          target: "/volume1/web/multi_draw/server"
+          rm: true
+
+      - name: Setup and start backend
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /volume1/web/multi_draw/server
+            npm install --production
+            pm2 delete multi_draw_backend || true
+            pm2 start server.js --name "multi_draw_backend" --watch \
+              -- --port 3001
+            pm2 save
+            echo "Backend started on port 3001"
+
+      # ========== NGINX ==========
+      - name: Reload NginX
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo nginx -t && sudo nginx -s reload
+            echo "Nginx reloaded"
+
+      # ========== VERIFY ==========
       - name: Verify deployment
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -47,12 +90,3 @@ jobs:
           script: |
             ls -la /volume1/web/multi_draw
             echo "Deployed successfully"
-      - name: Reload NginX
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          port: ${{ secrets.SSH_PORT }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            sudo nginx -t && sudo nginx -s reload
