@@ -4,7 +4,18 @@ const path = require('path');
 
 const app = express();
 app.use(express.json({ limit: '50mb' }));
-app.use(express.static('public'));
+//app.use(express.static('public'));
+app.set('trust proxy', 1);
+
+/*app.use(cors({
+  origin: [
+    'https://multidraw.laureni.synology.me',
+    'http://localhost:3000' // Для разработки
+  ],
+  credentials: true
+}));*/
+
+app.use(express.static('/volume1/web/multi_draw/client'));
 
 const BOARDS_FILE = path.join(__dirname, 'public/data/boards.json');
 const BOARDS_DIR = path.join(__dirname, 'public/data/boards');
@@ -179,8 +190,9 @@ app.delete('/api/boards/:id', async (req, res) => {
 });
 
 ensureDirectories().then(() => {
-  const PORT = process.env.PORT || 3001;
+  // Запуск сервера
+  const PORT = process.env.PORT || process.argv[2] || 3001;
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`API running on port ${PORT}`);
   });
 });
